@@ -12,7 +12,7 @@
 		
 		methods.load();
 		
-		$('div.selected').live( 'click', methods.flip );
+		$('div.ui-flashcard.selected').live( 'click', methods.flip );
 		$('button.ui-flashcard-prev').live( 'click', methods.prev );
 		$('button.ui-flashcard-next').live( 'click', methods.next );
     },
@@ -58,16 +58,22 @@
       return (appHtml);
     },
     flip : function (){
-    	$('div.selected div').toggleClass('ui-flashcard-face')
+    		$('div.selected').toggleClass('flip');
+	    	$('div.selected div').toggleClass('ui-flashcard-face').addClass('animate');
+	    	setTimeout("$('div.selected div').removeClass('animate');",500)
     },
     first : function(){
+    	$('div.ui-flashcard').removeClass('flip');
     	$("div.ui-flashcard").removeClass('selected');
     	$("div.ui-flashcard").eq(0).addClass('selected first');
     	$("div.ui-flashcard").eq(1).addClass('next');
     	$("div.ui-flashcard").eq(-1).addClass('previous last');
     	$("div.ui-flashcard div.ui-flashcard-front").addClass('ui-flashcard-face');
+    	$("div.ui-flashcard div.ui-flashcard-back").removeClass('ui-flashcard-face');
     },
     next : function(){
+    	$('div.ui-flashcard-group').addClass('prevent-transform');
+    	$('div.ui-flashcard').removeClass('flip');
     	if( $("div.next").hasClass('last') ){
 	    	$("div.previous").removeClass('previous');
 	    	$("div.selected").removeClass('selected').addClass('previous');
@@ -82,8 +88,11 @@
 	    	$("div.ui-flashcard div.ui-flashcard-back").removeClass('ui-flashcard-face');
 	    	$("div.ui-flashcard div.ui-flashcard-front").addClass('ui-flashcard-face');
 	    }
+	    return($('div.ui-flashcard-group').removeClass('prevent-transform'));
     },
     prev : function(){
+    	$('div.ui-flashcard-group').addClass('prevent-transform')
+    	$('div.ui-flashcard').removeClass('flip');
     	if( $("div.previous").hasClass('first') ){
     		$("div.next").removeClass('next');
     		$("div.selected").removeClass('selected').addClass('next');
@@ -98,6 +107,7 @@
 	    	$("div.ui-flashcard div.ui-flashcard-back").removeClass('ui-flashcard-face');
 	    	$("div.ui-flashcard div.ui-flashcard-front").addClass('ui-flashcard-face');
 	    }
+	    return($('div.ui-flashcard-group').removeClass('prevent-transform'));
     },
     settings : function(options){
 		$.extend( settings, options);
